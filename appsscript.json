@@ -1,11 +1,7 @@
 {
-  "timeZone": "America/Los_Angeles",
+  "timeZone": "America/New_York",
   "dependencies": {
-    "enabledAdvancedServices": []
   },
   "exceptionLogging": "STACKDRIVER",
-  "webapp": {
-    "executeAs": "USER_DEPLOYING",
-    "access": "MYSELF"
-  }
+  "runtimeVersion": "V8"
 }
