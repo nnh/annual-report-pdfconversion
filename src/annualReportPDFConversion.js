@@ -86,6 +86,16 @@ function annualReportPDFConversion() {
       targetId === PropertiesService.getScriptProperties().getProperty('isf28')
     ) {
       const parameters = new Map([['gid', '173520210']]);
+      const printSheet = findSheetBySheetId_(targetId, parameters.get('gid'));
+      if (printSheet) {
+        printSheet.hideColumns(8);
+        clearFiltersOnSheet_(printSheet);
+      }
+      const hideTargetSheet =
+        SpreadsheetApp.openById(targetId).getSheetByName('協力先リスト');
+      if (hideTargetSheet) {
+        hideTargetSheet.hideSheet();
+      }
       const options = generateOptionsString_(parameters);
       convertSpreadSheetToPdf.exportSpreadsheetToPDF_(
         targetId,
@@ -114,4 +124,24 @@ function annualReportPDFConversion() {
       convertSpreadSheetToPdf.createPdf(targetId, fileName);
     }
   });
+}
+
+function findSheetBySheetId_(spreadsheetId, sheetId) {
+  const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+  const sheets = spreadsheet.getSheets();
+  const targetSheet = sheets.filter(
+    sheet => sheet.getSheetId() === parseInt(sheetId, 10)
+  );
+  if (targetSheet.length === 1) {
+    return targetSheet[0];
+  } else {
+    return null;
+  }
+}
+
+function clearFiltersOnSheet_(sheet) {
+  const filter = sheet.getFilter();
+  if (filter) {
+    filter.remove();
+  }
 }
